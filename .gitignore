@@ -1,0 +1,6 @@
+.env
+*.pyc
+Pipfile
+Pipfile.lock
+app.log
+.python-version
