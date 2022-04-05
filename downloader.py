@@ -70,7 +70,7 @@ class Webex_Reports():
     def _delete_report(self, id: str):
         url = f'{self.base_url}/reports/{id}'
         response = requests.delete(url=url, headers={'Authorization': f'Bearer {self.access_token}'})
-        if response.status_code == '204':
+        if response.status_code == 204:
             log.info(f'Deleted Report ID: {id}')
             return response.status_code
         else:
