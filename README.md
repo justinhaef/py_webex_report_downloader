@@ -6,6 +6,8 @@ This CLI application was created to demonstrate how someone can use the Webex AP
 
 ## How to use this code
 
+[Vidcast.io Overview](https://app.vidcast.io/share/87f61a88-6073-40b3-9f5c-7760ea7d6f63)
+
 > There is an assumption that you understand Python and virtual environments. 
 
 > I also assume you've created a Webex Integration and have the `App ID` and `Secret`.
