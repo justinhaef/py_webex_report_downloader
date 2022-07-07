@@ -1,5 +1,3 @@
-import json
-from textwrap import indent
 import auth
 import downloader
 from pathlib import Path

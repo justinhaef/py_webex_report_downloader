@@ -11,10 +11,12 @@ class Webex_Reports():
         self.access_token = access_token
         self.refresh_token = refresh_token
         self.base_url = 'https://webexapis.com/v1'
+        self.session = requests.Session()
+        self.session.headers.update({'Authorization': f'Bearer {self.access_token}'})
 
     def _get_templates(self):
         url = f'{self.base_url}/report/templates'
-        response = requests.get(url=url, headers={'Authorization': f'Bearer {self.access_token}'})
+        response = self.session.get(url=url)
         if response.status_code != 401:
             log.info(f'Gathered Templates')
             templates = json.loads(response.text)
@@ -35,7 +37,7 @@ class Webex_Reports():
             "endDate": "2022-03-31",
             "siteList": "jhaefner-gasandbox.webex.com"
         }
-        response = requests.post(url=url, headers={'Authorization': f'Bearer {self.access_token}'}, json=data)
+        response = self.session.post(url=url, json=data)
         if response.status_code != 401:
             json_response = json.loads(response.text)
             log.info(f"Created Report ID: {json_response['items']['Id']}")
@@ -48,7 +50,7 @@ class Webex_Reports():
         report_status = 'not done'
         download_url = ""
         while report_status != 'done':
-            response = requests.get(url=url, headers={'Authorization': f'Bearer {self.access_token}'})
+            response = self.session.get(url=url)
             json_response = json.loads(response.text)
             download_url = json_response['items'][0]['downloadURL']
             report_status = json_response['items'][0]['status']
@@ -59,7 +61,7 @@ class Webex_Reports():
 
     def _download_report(self, url: str):
         try:
-            response = requests.get(url=url, headers={'Authorization': f'Bearer {self.access_token}'})
+            response = self.session.get(url=url)
             with open(Path('./files/test_download.csv'), 'wb') as writefile:
                 writefile.write(response.content)
             log.info(f'Downloaded Report...')
@@ -69,7 +71,7 @@ class Webex_Reports():
 
     def _delete_report(self, id: str):
         url = f'{self.base_url}/reports/{id}'
-        response = requests.delete(url=url, headers={'Authorization': f'Bearer {self.access_token}'})
+        response = self.session.delete(url=url)
         if response.status_code == 204:
             log.info(f'Deleted Report ID: {id}')
             return response.status_code
