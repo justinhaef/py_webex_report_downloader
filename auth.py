@@ -17,8 +17,6 @@ class Auth():
         self.token_url = 'https://webexapis.com/v1/access_token/'
 
         self.scope = [
-            "spark:kms",
-            "meeting:admin_schedule_read",
             "analytics:read_all"
             ]
 

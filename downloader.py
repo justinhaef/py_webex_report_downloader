@@ -6,6 +6,17 @@ import logging
 log = logging.getLogger(__name__)
 
 class Webex_Reports():
+    """ Webex Reports Class that will do all the work of interacting with 
+        the Webex Reports API. 
+
+        This class will:
+        * gather all the available report templates
+        * prompt the user to select the needed template
+        * created the selected report using hardcoded values
+        * check if the report is finished being created
+        * download the report
+        * delete the report from Webex after it was downloaded. 
+    """
 
     def __init__(self, access_token: str, refresh_token: str):
         self.access_token = access_token
@@ -15,6 +26,11 @@ class Webex_Reports():
         self.session.headers.update({'Authorization': f'Bearer {self.access_token}'})
 
     def _get_templates(self):
+        """ Get all the report templates and 
+            print out the name/ID to the user for selection.
+
+            Note: this code only works with 'Details' report.
+        """
         url = f'{self.base_url}/report/templates'
         response = self.session.get(url=url)
         if response.status_code != 401:
@@ -30,6 +46,10 @@ class Webex_Reports():
             log.warning('Access Token was Expired')
 
     def _report_creation(self, template: str):
+        """ Private function that creates the needed report.
+            In this example, the startDate, endDate and siteList
+            are hardcoded.
+        """
         url = f'{self.base_url}/reports'
         data = {
             "templateId": int(template),
@@ -46,6 +66,9 @@ class Webex_Reports():
             log.warning('Access Token was Expired')
 
     def _check_on_report(self, id: str):
+        """ Loop on a 30 second interval checking if the newly created
+            report is done and ready to be downloaded.
+        """
         url = f'{self.base_url}/reports/{id}'
         report_status = 'not done'
         download_url = ""
@@ -60,6 +83,9 @@ class Webex_Reports():
         return download_url
 
     def _download_report(self, url: str):
+        """ Private function that will actually download the report to a 
+            hardcoded named CSV file.
+        """
         try:
             response = self.session.get(url=url)
             with open(Path('./files/test_download.csv'), 'wb') as writefile:
@@ -70,6 +96,8 @@ class Webex_Reports():
             print(f'Error: {e}')
 
     def _delete_report(self, id: str):
+        """ Finally, we need to delete that downloaded report.
+        """
         url = f'{self.base_url}/reports/{id}'
         response = self.session.delete(url=url)
         if response.status_code == 204:
