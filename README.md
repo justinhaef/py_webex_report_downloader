@@ -5,7 +5,7 @@
 This CLI application was created to demonstrate how someone can use the Webex APIs to create and download a report.  The reason this demo was created is because some users find it confusing that the reports that are scheduled in Control Hub do not show up in the list of available reports from the API query.  **The only reports that can be downloaded via the API are reports that were created via API.**
 
 ## How to use this code
-[YouTube Overview](https://youtu.be/0wN4LmflHeI)
+
 [Vidcast.io Overview](https://app.vidcast.io/share/87f61a88-6073-40b3-9f5c-7760ea7d6f63)
 
 > There is an assumption that you understand Python and virtual environments. 
@@ -18,6 +18,7 @@ This CLI application was created to demonstrate how someone can use the Webex AP
 1. Setup your virtual environment using the tools you're accustomed too. 
 1. `pip install -r requirements.txt`
 1. Modify the code in `downloader.py` under the `_report_creation` function to have your start date, end date and Webex instance.  
+1. Rename `.env-template` to `.env`.
 1. Modify the code in `.env` to have your application ID and secret. 
 1. `python app.py`
 1. Copy the URL provided by the CLI.
